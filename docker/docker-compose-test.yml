@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Backend FastAPI (Docker image'den)
+  backend:
+    image: sarkopeni-backend:latest
+    container_name: sarcopenia_backend
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "true"
+    networks:
+      - sarcopenia_network
+
+  # Frontend React (build from source)
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: sarcopenia_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - sarcopenia_network
+
+networks:
+  sarcopenia_network:
+    driver: bridge
