@@ -1,0 +1,19 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Bağımlılıkları yükle
+COPY package*.json ./
+RUN npm ci
+
+# Kodları kopyala
+COPY . .
+
+# Build
+RUN npm run build
+
+# Port
+EXPOSE 3000
+
+# Çalıştır
+CMD ["npm", "start"]
